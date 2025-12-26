@@ -81,7 +81,9 @@ Indicação de que a saída de uma ação é a entrada de outra ação.
 -**Map-reduce de chamadas de IA**
 
 
+
 # Arquitetura Básica do LangChain
 
+**Ponto de atenção**: *langchain evolui muito rápido, então rapidamente componentes ficam legados ou até mesmo deprecados. **Sempre verificar a versão do langchain sendo utilizada.** Tomar cuidado com a sugestão de IA no desenvolvimento, porque os agentes podem estar considerando uma versão antiga.*
 
 
