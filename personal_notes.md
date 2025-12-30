@@ -82,6 +82,107 @@ Indicação de que a saída de uma ação é a entrada de outra ação.
 
 
 
+## Métodos de Invocação do langchain_openai
+
+O pacote `langchain_openai` fornece diferentes métodos para interagir com modelos de chat, cada um adequado para diferentes cenários:
+
+### Métodos Síncronos
+
+- **`invoke(input)`**: Execução síncrona única
+  - Recebe uma entrada (string ou mensagem)
+  - Retorna um objeto `AIMessage` completo com `.content`
+  - Bloqueia até receber a resposta completa
+  - Uso: Chamadas simples e diretas
+
+- **`stream(input)`**: Streaming síncrono
+  - Retorna um iterador que produz chunks (tokens) conforme são gerados
+  - Cada chunk é um objeto com `.content`
+  - Útil para exibir respostas em tempo real
+  - Uso: Quando você quer ver a resposta sendo gerada token por token
+
+- **`batch(inputs)`**: Processamento em lote síncrono
+  - Recebe uma lista de entradas
+  - Processa múltiplas requisições de uma vez
+  - Retorna lista de resultados na mesma ordem das entradas
+  - Uso: Quando você tem várias requisições e quer processá-las juntas
+
+### Métodos Assíncronos
+
+- **`ainvoke(input)`**: Execução assíncrona única
+  - Versão assíncrona do `invoke()`
+  - Deve ser usado com `await` dentro de funções `async`
+  - Não bloqueia a execução
+  - Uso: Chamadas únicas em código assíncrono
+
+- **`astream(input)`**: Streaming assíncrono
+  - Versão assíncrona do `stream()`
+  - Retorna um async iterator
+  - Deve ser usado com `async for`
+  - Uso: Streaming em aplicações assíncronas
+
+- **`abatch(inputs)`**: Processamento em lote assíncrono
+  - Versão assíncrona do `batch()`
+  - Processa múltiplas requisições em paralelo de forma assíncrona
+  - Mais eficiente que múltiplos `ainvoke()` com `asyncio.gather()`
+  - Uso: Múltiplas requisições em paralelo (recomendado para performance)
+
+### Tabela Comparativa
+
+| Método | Tipo | Entrada | Retorno | Quando Usar |
+|--------|------|---------|---------|-------------|
+| `invoke()` | Síncrono | 1 entrada | Objeto completo | Chamada única simples |
+| `stream()` | Síncrono | 1 entrada | Iterador de chunks | Resposta em tempo real |
+| `batch()` | Síncrono | Lista de entradas | Lista de objetos | Várias requisições, código síncrono |
+| `ainvoke()` | Assíncrono | 1 entrada | Objeto completo (await) | Chamada única em código async |
+| `astream()` | Assíncrono | 1 entrada | Async iterator | Streaming em apps async |
+| `abatch()` | Assíncrono | Lista de entradas | Lista de objetos (await) | Múltiplas requisições em paralelo |
+
+### Exemplos de Uso
+
+**invoke()**:
+```python
+message = model.invoke("Hello World")
+print(message.content)
+```
+
+**stream()**:
+```python
+for chunk in model.stream("Hello World"):
+    print(chunk.content, end="", flush=True)
+```
+
+**batch()**:
+```python
+inputs = ["Pergunta 1", "Pergunta 2", "Pergunta 3"]
+results = model.batch(inputs)
+for result in results:
+    print(result.content)
+```
+
+**ainvoke()**:
+```python
+result = await model.ainvoke("Hello World")
+print(result.content)
+```
+
+**abatch()**:
+```python
+inputs = ["Pergunta 1", "Pergunta 2", "Pergunta 3"]
+results = await model.abatch(inputs)
+for result in results:
+    print(result.content)
+```
+
+### Classes Principais do langchain_openai
+
+- **`ChatOpenAI`**: Modelos de chat (GPT-3.5, GPT-4, etc.) - suporta todos os métodos acima
+- **`OpenAI`**: Modelos de linguagem tradicionais (legacy)
+- **`OpenAIEmbeddings`**: Geração de embeddings vetoriais para busca semântica
+- **`OpenAIImageGenerator`**: Geração de imagens com DALL·E
+
+Todos esses métodos seguem o padrão **Runnable** do LangChain, permitindo composição com pipes (`|`) e integração em chains complexas.
+
+
 # Arquitetura Básica do LangChain
 
 **Ponto de atenção**: *langchain evolui muito rápido, então rapidamente componentes ficam legados ou até mesmo deprecados. **Sempre verificar a versão do langchain sendo utilizada.** Tomar cuidado com a sugestão de IA no desenvolvimento, porque os agentes podem estar considerando uma versão antiga.*
