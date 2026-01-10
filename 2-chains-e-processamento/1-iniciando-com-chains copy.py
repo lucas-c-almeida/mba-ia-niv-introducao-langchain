@@ -10,7 +10,10 @@ question_template = PromptTemplate(
 
 model = ChatOpenAI(model="gpt-5-mini", temperature=0.5)
 
-chain = question_template | model
+chain = question_template | model #O output de question template é o input de model
 
-result = chain.invoke({"name": "Wesley"})
+result = chain.invoke({"name": "Wesley"}) # Parâmetros vão para o question_template
 print(result.content)
+
+# Esta é apenas uma forma de criar as chains.
+# Os próximos arquivos mostram outras formas.

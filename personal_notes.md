@@ -183,6 +183,45 @@ for result in results:
 Todos esses métodos seguem o padrão **Runnable** do LangChain, permitindo composição com pipes (`|`) e integração em chains complexas.
 
 
+# Gerenciamento de API Keys no LangChain
+
+## Autenticação Automática via Variáveis de Ambiente
+
+O LangChain **não requer** passar API keys explicitamente no código. Ele lê automaticamente as chaves das variáveis de ambiente usando nomes padrão específicos para cada provedor.
+
+**Variáveis de Ambiente Padrão**:
+   - `OPENAI_API_KEY` - Para modelos OpenAI (ChatOpenAI, OpenAIEmbeddings, etc.)
+   - `GOOGLE_API_KEY` - Para modelos Google Gemini
+   - Outros provedores seguem padrões similares
+
+**Carregamento via `.env`**:
+   ```python
+   from dotenv import load_dotenv
+   load_dotenv()  # Carrega variáveis do arquivo .env
+   
+   # Não precisa passar API key explicitamente!
+   model = ChatOpenAI(model="gpt-5-nano")
+   gemini = init_chat_model(model="gemini-2.5-flash", model_provider="google_genai")
+   ```
+
+### Passagem Explícita (Opcional)
+
+Se necessário, pode passar explicitamente:
+```python
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Opção 1: Automático (recomendado)
+model = ChatOpenAI(model="gpt-5-nano")
+
+# Opção 2: Explícito (quando necessário)
+model = ChatOpenAI(
+    model="gpt-5-nano",
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+```
+
 # Arquitetura Básica do LangChain
 
 **Ponto de atenção**: *langchain evolui muito rápido, então rapidamente componentes ficam legados ou até mesmo deprecados. **Sempre verificar a versão do langchain sendo utilizada.** Tomar cuidado com a sugestão de IA no desenvolvimento, porque os agentes podem estar considerando uma versão antiga.*

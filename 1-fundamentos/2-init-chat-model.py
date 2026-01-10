@@ -1,3 +1,9 @@
+"""
+Init chat model é uma maneira mais agnóstica de fazer a implementação. 
+Não necessita de um objeto específico para o modelo.
+O modelo escolhido é selecionado via variável model_provider
+"""
+
 from langchain.chat_models import init_chat_model
 from dotenv import load_dotenv
 load_dotenv()

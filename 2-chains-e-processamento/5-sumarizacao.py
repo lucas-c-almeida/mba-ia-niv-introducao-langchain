@@ -37,19 +37,31 @@ This urban orchestra plays from dawn until dusk,
 a endless song of ambition, struggle, and hope.
 """
 
+# RecursiveCharacterTextSplitter separa o texto priorizando o corte nas quebras 
+# (pontuação, parágrafo ou espaço)
+# É possível indicar separadores 
+
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=250, chunk_overlap=70, 
+    chunk_size=250, # Quantos caracteres cada chunk deve ter (aproximadamente)
+    chunk_overlap=70    # Insere trachos repetidos anteriores e seguintes nos chunks
+                        # Evita perda de contexto no corte.
 )
 
 parts = splitter.create_documents([long_text])
+# A função create_documents gera uma lista de Documents
+# Os documents podem ser inseridos como Runnables
 
-# for part in parts:
-#     print(part.page_content)
-#     print("-"*30)
+# Imprimir exemplo
+for part in parts:
+    print(part.page_content)
+    print("-"*30)
 
 llm = ChatOpenAI(model="gpt-5-nano", temperature=0)
 
-chain_sumarize = load_summarize_chain(llm, chain_type="stuff", verbose=False)
+chain_summarize = load_summarize_chain(llm, chain_type="stuff", verbose=False)
 
-result = chain_sumarize.invoke({"input_documents": parts})
+result = chain_summarize.invoke({"input_documents": parts})
+# Retorna um dicionário contendo:
+# - input_documents: os documentos fornecidos
+# - output_text: resumo
 print(result["output_text"])
