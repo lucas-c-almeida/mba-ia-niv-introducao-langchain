@@ -64,4 +64,6 @@ result = chain_summarize.invoke({"input_documents": parts})
 # Retorna um dicionário contendo:
 # - input_documents: os documentos fornecidos
 # - output_text: resumo
+
+# A chain do tipo "stuff" junta todos os 
 print(result["output_text"])

@@ -50,6 +50,10 @@ parts = splitter.create_documents([long_text])
 llm = ChatOpenAI(model="gpt-5-nano", temperature=0)
 
 chain_sumarize = load_summarize_chain(llm, chain_type="map_reduce", verbose=True)
+# Map Reduce trabalha com resumos de resumos. 
+# 1. Resume cada documento individualmente
+# 2. Junta todos os resumos
+# 3. Resume os resumos
 
 result = chain_sumarize.invoke({"input_documents": parts})
 print(result)

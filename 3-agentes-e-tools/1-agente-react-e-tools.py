@@ -5,11 +5,15 @@ from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 load_dotenv()
 
-@tool("calculator", return_direct=True)
+@tool(
+    "calculator", # Nome dado
+    return_direct=True # Devolve o retorno da função para a LLM após executada.
+    ) 
 def calculator(expression: str) -> str:
     """Evaluate a simple mathematical expression and return the result as a string."""
+    # Esta é a instrução que o modelo recebe a respeito desta ferramenta
     try:
-        result = eval(expression)  # cuidado: apenas para exemplo didático
+        result = eval(expression)  # cuidado: apenas para exemplo didático. Tem risco de segurança
     except Exception as e:
         return f"Error: {e}"
     return str(result)
@@ -32,7 +36,9 @@ def web_search_mock(query: str) -> str:
     return "I don't know the capital of that country."
 
 
-llm = ChatOpenAI(model="gpt-5-mini", disable_streaming=True)
+llm = ChatOpenAI(model="gpt-5-mini", disable_streaming=True) 
+# Atenção aos parâmetros. Isso muda de modelo para modelo. 
+
 tools = [calculator, web_search_mock]
 
 prompt = PromptTemplate.from_template(
@@ -75,4 +81,4 @@ agent_executor = AgentExecutor.from_agent_and_tools(
     max_iterations=3)
 
 print(agent_executor.invoke({"input": "What is the capital of Iran?"}))
-print(agent_executor.invoke({"input": "How much is 10 + 10?"}))
+print(agent_executor.invoke({"input": "How much is 10 + 10?"}))++
