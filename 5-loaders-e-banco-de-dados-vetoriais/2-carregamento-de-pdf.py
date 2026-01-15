@@ -1,7 +1,7 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-loader = PyPDFLoader("./gpt5.pdf")
+loader = PyPDFLoader("5-loaders-e-banco-de-dados-vetoriais\2-carregamento-de-pdf.py")
 docs = loader.load()
 
 splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
